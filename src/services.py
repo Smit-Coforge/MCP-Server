@@ -10,6 +10,7 @@ CATALOG = STORE["catalog"]
 REVIEW_QUEUE: list[dict] = []
 
 DENY_INSIDE_CADENCE = {"preference", "performance"}
+KNOWN_REASONS = {"broken", "lost", "new_hire", "preference", "performance"}
 
 
 def years_since(issued_on: date, clock: date = POLICY_CLOCK) -> int:
@@ -63,6 +64,9 @@ def check_request_eligibility(
 
     if quantity > limit["max_quantity"]:
         return {"outcome": "denied", "code": "over_quantity"}
+
+    if reason not in KNOWN_REASONS:
+        return {"outcome": "unknown", "code": "ambiguous"}
 
     if reason == "new_hire" and employee["tenure_years"] >= 1:
         return {"outcome": "denied", "code": "reason_conflict"}

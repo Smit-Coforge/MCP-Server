@@ -78,6 +78,20 @@ def test_contractor_ssd_is_eligible():
     }
 
 
+def test_personal_use_is_ambiguous():
+    assert check_request_eligibility("E100", "laptop", "personal use", 1) == {
+        "outcome": "unknown",
+        "code": "ambiguous",
+    }
+
+
+def test_missing_reason_is_ambiguous():
+    assert check_request_eligibility("E100", "laptop", "", 1) == {
+        "outcome": "unknown",
+        "code": "ambiguous",
+    }
+
+
 def test_starter_laptop_for_new_hire():
     assert check_request_eligibility("E201", "laptop", "new_hire", 1) == {
         "outcome": "eligible",
