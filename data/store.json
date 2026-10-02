@@ -1,0 +1,109 @@
+{
+  "policy_clock": "2026-10-01",
+  "employees": {
+    "E100": {
+      "employee_id": "E100",
+      "name": "Alex Chen",
+      "employment_type": "fulltime",
+      "tenure_years": 4,
+      "equipment": [{ "item": "monitor", "issued_on": "2022-01-15" }]
+    },
+    "E101": {
+      "employee_id": "E101",
+      "name": "Priya Shah",
+      "employment_type": "fulltime",
+      "tenure_years": 3,
+      "equipment": [{ "item": "monitor", "issued_on": "2025-01-01" }]
+    },
+    "E200": {
+      "employee_id": "E200",
+      "name": "Jordan Hale",
+      "employment_type": "fulltime",
+      "tenure_years": 5,
+      "equipment": [{ "item": "laptop", "issued_on": "2025-06-01" }]
+    },
+    "E201": {
+      "employee_id": "E201",
+      "name": "Sam Ortiz",
+      "employment_type": "fulltime",
+      "tenure_years": 0,
+      "equipment": []
+    },
+    "E300": {
+      "employee_id": "E300",
+      "name": "Riley Kim",
+      "employment_type": "intern",
+      "tenure_years": 0,
+      "equipment": []
+    },
+    "E400": {
+      "employee_id": "E400",
+      "name": "Casey Nguyen",
+      "employment_type": "contractor",
+      "tenure_years": 1,
+      "equipment": []
+    }
+  },
+  "catalog": {
+    "monitor": {
+      "kind": "tracked",
+      "limits": {
+        "fulltime": { "max_quantity": 2, "cadence_years": 3 },
+        "intern": { "max_quantity": 1, "cadence_years": 3 },
+        "contractor": { "max_quantity": 1, "cadence_years": 2 }
+      }
+    },
+    "laptop": {
+      "kind": "tracked",
+      "limits": {
+        "fulltime": { "max_quantity": 1, "cadence_years": 2 },
+        "contractor": { "max_quantity": 1, "cadence_years": 2 }
+      }
+    },
+    "dock": {
+      "kind": "tracked",
+      "limits": {
+        "fulltime": { "max_quantity": 1, "cadence_years": 4 }
+      }
+    },
+    "headset": {
+      "kind": "tracked",
+      "limits": {
+        "fulltime": { "max_quantity": 1, "cadence_years": 3 },
+        "intern": { "max_quantity": 1, "cadence_years": 2 },
+        "contractor": { "max_quantity": 1, "cadence_years": 2 }
+      }
+    },
+    "mouse": {
+      "kind": "untracked",
+      "limits": {
+        "fulltime": { "max_quantity": 2, "cadence_years": null },
+        "intern": { "max_quantity": 1, "cadence_years": null },
+        "contractor": { "max_quantity": 2, "cadence_years": null }
+      }
+    },
+    "keyboard": {
+      "kind": "untracked",
+      "limits": {
+        "fulltime": { "max_quantity": 1, "cadence_years": null },
+        "intern": { "max_quantity": 1, "cadence_years": null },
+        "contractor": { "max_quantity": 1, "cadence_years": null }
+      }
+    },
+    "external_ssd": {
+      "kind": "untracked",
+      "limits": {
+        "fulltime": { "max_quantity": 2, "cadence_years": null },
+        "intern": { "max_quantity": 1, "cadence_years": null },
+        "contractor": { "max_quantity": 2, "cadence_years": null }
+      }
+    },
+    "webcam": {
+      "kind": "untracked",
+      "limits": {
+        "fulltime": { "max_quantity": 1, "cadence_years": null },
+        "contractor": { "max_quantity": 1, "cadence_years": null }
+      }
+    }
+  }
+}
