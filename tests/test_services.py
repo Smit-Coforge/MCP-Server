@@ -1,5 +1,7 @@
+import os
 import runpy
 from datetime import date
+from pathlib import Path
 
 import pytest
 
@@ -81,13 +83,19 @@ def test_eligibility(employee_id, item, reason, quantity, outcome, code):
 
 
 def test_review_ids_count_up():
-    reset_review_queue()
+    path = Path(os.environ["REVIEW_QUEUE_PATH"])
+    if path.exists():
+        path.unlink()
     first = flag_for_human_review("E999", {"item": "mouse"}, "not_found")
     second = flag_for_human_review("E200", {}, "early_replacement")
     assert first["review_id"] == "R001"
     assert second["review_id"] == "R002"
-    assert REVIEW_QUEUE == [first, second]
+    REVIEW_QUEUE.clear()
+    third = flag_for_human_review("E100", {"item": "laptop"}, "ambiguous")
+    assert third["review_id"] == "R003"
+    assert [row["review_id"] for row in REVIEW_QUEUE] == ["R001", "R002", "R003"]
     reset_review_queue()
+    assert REVIEW_QUEUE == []
 
 
 def test_server_tools_delegate_to_the_records(monkeypatch):

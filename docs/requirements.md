@@ -148,4 +148,4 @@ An intern asking for a laptop or a dock is a deny (`not_allowed`). It is not an 
 
 `check_request_eligibility(employee_id, item, reason, quantity)` returns `outcome` (`eligible`, `denied`, or `unknown`) and `code` from the evaluation steps. It reads employment type from the employee file. It does not take it as an argument.
 
-`flag_for_human_review(employee_id, request, reason)` appends one queue record and returns its id. This is the only write. `request` is the four fields. `reason` is `not_found`, `no_rule`, `early_replacement`, or `ambiguous`.
+`flag_for_human_review(employee_id, request, reason)` appends one queue record and returns its id. This is the only write. The queue is `data/review_queue.json`, so the next run continues from the last id instead of starting again at `R001`. `request` is the four fields. `reason` is `not_found`, `no_rule`, `early_replacement`, or `ambiguous`.

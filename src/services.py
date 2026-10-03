@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import date
 from pathlib import Path
 
@@ -7,6 +8,7 @@ STORE = json.loads(STORE_PATH.read_text())
 POLICY_CLOCK = date.fromisoformat(STORE["policy_clock"])
 EMPLOYEES = STORE["employees"]
 CATALOG = STORE["catalog"]
+_DEFAULT_QUEUE = STORE_PATH.with_name("review_queue.json")
 REVIEW_QUEUE: list[dict] = []
 
 DENY_INSIDE_CADENCE = {"preference", "performance"}
@@ -87,17 +89,37 @@ def check_request_eligibility(
     return {"outcome": "unknown", "code": "early_replacement"}
 
 
+def _queue_path() -> Path:
+    override = os.environ.get("REVIEW_QUEUE_PATH")
+    return Path(override) if override else _DEFAULT_QUEUE
+
+
+def _read_queue() -> list[dict]:
+    path = _queue_path()
+    if not path.is_file():
+        return []
+    return json.loads(path.read_text())
+
+
+def _write_queue(records: list[dict]) -> None:
+    path = _queue_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(records, indent=2) + "\n")
+    REVIEW_QUEUE[:] = records
+
+
 def flag_for_human_review(employee_id: str, request: dict, reason: str) -> dict:
-    review_id = f"R{len(REVIEW_QUEUE) + 1:03d}"
+    records = _read_queue()
     record = {
-        "review_id": review_id,
+        "review_id": f"R{len(records) + 1:03d}",
         "employee_id": employee_id,
         "request": request,
         "reason": reason,
     }
-    REVIEW_QUEUE.append(record)
+    records.append(record)
+    _write_queue(records)
     return record
 
 
 def reset_review_queue() -> None:
-    REVIEW_QUEUE.clear()
+    _write_queue([])
