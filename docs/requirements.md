@@ -97,7 +97,7 @@ Before the call, an item phrase that matches a catalog key is rewritten to that 
 
 A sentence can name more than one item. Each tool call still checks one item. The loop allows 16 steps. The printed answer then has one line per check: Approved, Denied, or Escalated, plus that check's outcome code. A single decision is printed only when every check agrees, and that decision is only approve, deny, or escalate. If the loop ends before a finish step, those lines are still printed, followed by how many steps ran.
 
-The draft may mention only facts those tools returned: the employment type, the issued date, the max quantity, the cadence, and the outcome code. Reflection drops any claim that is not in an observation. It also replaces the finish decision and outcome code when they disagree with `check_request_eligibility`, and it drops a decision when that tool was never called. The response printed after reflection is the final one.
+The draft may mention only facts those tools returned: the employment type, the issued date, the max quantity, the cadence, and the outcome code. Reflection drops any claim that is not in an observation. It also replaces the finish decision and outcome code when they disagree with `check_request_eligibility`, and it drops a decision when that tool was never called. The response after reflection is the final one. The console prints that response, the decision, and any reflection change. The run file keeps the tool trace and the draft.
 
 ## Examples
 

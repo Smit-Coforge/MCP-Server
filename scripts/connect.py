@@ -29,6 +29,15 @@ async def ping() -> None:
         print("ping:", payload(await client.call_tool("ping", {})))
 
 
+async def employee() -> None:
+    async with Client(server_params("server")) as client:
+        print("connection is ok")
+        print(
+            "get_employee_info E100:",
+            payload(await client.call_tool("get_employee_info", {"employee_id": "E100"})),
+        )
+
+
 async def tools() -> None:
     async with Client(server_params("server")) as client:
         print("registered tools:", [tool.name for tool in (await client.list_tools()).tools])
@@ -79,4 +88,10 @@ async def tools() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(ping() if sys.argv[-1] == "ping" else tools())
+    command = sys.argv[-1]
+    if command == "ping":
+        asyncio.run(ping())
+    elif command == "employee":
+        asyncio.run(employee())
+    else:
+        asyncio.run(tools())

@@ -27,6 +27,10 @@ def test_scripted_monitor_is_approved():
     shown = agent.render_result(result)
     assert "Decision: APPROVE" in shown
     assert "draft matches the tool observations." in shown
+    short = agent.summary_result(result)
+    assert short.startswith("Decision: APPROVE\n")
+    assert "Thought:" not in short
+    assert result["response"] in short
 
 
 def test_scripted_laptop_preference_is_denied():
@@ -71,15 +75,16 @@ def test_reflection_drops_unconfirmed_claims():
     )
     assert checked["dropped"] == ["Employment type is manager.", "Cadence is 9 years."]
     assert checked["response"] == "Approved monitor for E100. Outcome code is ok."
-    assert "Reflection dropped:" in agent.render_result(
-        {
-            "trace": [],
-            "decision": "approve",
-            "draft": checked["response"],
-            "dropped": checked["dropped"],
-            "response": checked["response"],
-        }
-    )
+    printed = {
+        "trace": [],
+        "decision": "approve",
+        "draft": checked["response"],
+        "dropped": checked["dropped"],
+        "response": checked["response"],
+    }
+    assert "Reflection dropped:" in agent.render_result(printed)
+    assert "Thought:" not in agent.summary_result(printed)
+    assert "Reflection dropped:" in agent.summary_result(printed)
 
 
 def test_finish_decision_follows_eligibility():
@@ -105,7 +110,9 @@ def test_finish_without_eligibility_is_dropped():
 
     result = asyncio.run(run_agent("what is the name of employee E101", no_check))
     assert result["decision"] is None
-    assert "No eligibility result confirmed it." in agent.render_result(result)
+    shown = agent.render_result(result)
+    assert "No eligibility result confirmed it." in shown
+    assert "No eligibility result confirmed it." in agent.summary_result(result)
 
 
 def test_each_item_gets_its_own_line():

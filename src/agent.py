@@ -299,8 +299,28 @@ def render_result(result: dict) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def summary_result(result: dict) -> str:
+    lines = []
+    decision = result.get("decision")
+    if decision in {"approve", "deny", "escalate"}:
+        lines.append(f"Decision: {decision.upper()}")
+    if result.get("dropped"):
+        lines.append("Reflection dropped:")
+        lines.extend(f"- {sentence}" for sentence in result["dropped"])
+    note = result.get("reflection_note") or ""
+    if note:
+        lines.append(f"Reflection: {note}")
+    if result.get("response"):
+        lines.append(result["response"])
+    if not lines:
+        for turn in result.get("trace") or []:
+            observation = json.dumps(turn["observation"], default=str)
+            lines.append(f"{turn['action']}: {observation}")
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def print_result(result: dict) -> None:
-    print(render_result(result), end="")
+    print(summary_result(result), end="")
 
 
 def save_run(result: dict, directory: Path | None = None) -> Path:
