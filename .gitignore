@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Agent run traces and the review queue written by the server
+runs/
+data/review_queue.json
